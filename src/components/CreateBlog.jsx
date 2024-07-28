@@ -8,15 +8,17 @@ import { useNavigate } from 'react-router-dom';
 const CreateBlog = ({ defaultValues }) => {
     const navigate = useNavigate();
     const { register, handleSubmit, reset, formState: { errors } } = useForm({
-        defaultValues: defaultValues || {}
+        defaultValues: defaultValues || {},
     });
     const [description, setDescription] = useState('');
     const [image, setImage] = useState('');
-
+    const [replace_image, setRepalceImageValue] = useState(0);
+    const [isUpdate, setUpdateRequest] = useState(0);
 
     useEffect(() => {
         reset(defaultValues);
         setDescription(defaultValues?.description || '');
+        setUpdateRequest(defaultValues && defaultValues.id ? true : false);
     }, [defaultValues, reset]);
 
     function onChangeDescription(e) {
@@ -27,16 +29,23 @@ const CreateBlog = ({ defaultValues }) => {
         setImage(e.target.files[0]);
     }
 
+    const onChangeReplaceImage = (e) => {
+        setRepalceImageValue(e.target.checked ? 1 : 0)
+    }
+
     const formSubmit = async (data) => {
         const formData = new FormData();
         formData.append('description', description);
         formData.append('image', image);
+        formData.append('replace_image', replace_image);
         Object.entries(data).forEach(([key, value]) => {
-            formData.append(key, value);
+            if ('description' !== key) {
+                formData.append(key, value);
+            }
         });
-
         try {
-            const res = await fetch("http://127.0.0.1:8000/api/blogs/save", {
+            const method = isUpdate ? defaultValues.id + '?_method=PUT' : 'save';
+            const res = await fetch("http://127.0.0.1:8000/api/blogs/" + method, {
                 method: 'POST',
                 body: formData
             });
@@ -63,7 +72,7 @@ const CreateBlog = ({ defaultValues }) => {
     return (
         <div className='container mb-5'>
             <div className="d-flex justify-content-between mt-5 mb-4">
-                <h4>{defaultValues ? 'Update' : 'Create'}</h4>
+                <h4>{isUpdate ? 'Update' : 'Create'}</h4>
                 <a href="/" className='btn btn-dark'>Back</a>
             </div>
             <form onSubmit={handleSubmit(formSubmit)}>
@@ -94,7 +103,21 @@ const CreateBlog = ({ defaultValues }) => {
                                 onChange={onChangeDescription} />
                         </div>
                         <div className="mb-3">
-                            <label className="form-label">Image</label>
+                            <label className="form-label">Image</label><br />
+                            {
+                                (defaultValues && defaultValues.image) && (
+                                    <>
+                                        <img className='w-25 mb-2' src={`http://127.0.0.1:8000/uploads/blogs/${defaultValues.image}`} />
+                                        <div className="form-check">
+                                            <input className="form-check-input" type="checkbox" onChange={onChangeReplaceImage} />
+                                            <label className="form-check-label" htmlFor="flexCheckDefault">
+                                                Replace/Remove Image
+                                            </label>
+                                        </div>
+                                    </>
+                                )
+                            }
+
                             <input type='file' onChange={onChangeImageField} className='form-control' />
                         </div>
                         <div className="mb-3">
@@ -105,7 +128,7 @@ const CreateBlog = ({ defaultValues }) => {
                                 placeholder='Author' />
                             {errors.author && <p className='invalid-feedback'>Author field is required</p>}
                         </div>
-                        <button type="submit" className='btn btn-dark'>Create</button>
+                        <button type="submit" className='btn btn-dark'>{isUpdate ? 'Update' : 'Create'}</button>
                     </div>
                 </div>
             </form>
