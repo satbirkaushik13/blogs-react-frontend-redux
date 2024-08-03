@@ -5,7 +5,6 @@ import Pagination from './Pagination';
 
 const Blogs = () => {
     const [blogs, setBlogs] = useState(null);
-    const [active, setActive] = useState(1);
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const fetchBlogs = async (page = 1) => {
@@ -35,19 +34,15 @@ const Blogs = () => {
             console.error('Error:', error);
         }
     }
+
     useEffect(() => {
         fetchBlogs();
     }, []);
 
-    const items = [];
-
-    for (let number = 1; number <= 5; number++) {
-        items.push(
-            <Pagination.Item key={number} active={number === active} onClick={() => setActive(number)}>
-                {number}
-            </Pagination.Item>
-        );
-    }
+    const goToPage = (page) => {
+        setPage(page);
+        fetchBlogs(page);
+    };
 
     return (
         <div className="container">
@@ -73,7 +68,7 @@ const Blogs = () => {
                     1 < totalPages && (
                         <div className="row">
                             <div className="col-md-12">
-                                <Pagination page={page} totalPages={totalPages} goToPage={fetchBlogs} />
+                                <Pagination page={page} totalPages={totalPages} goToPage={goToPage} />
                             </div>
                         </div>
                     )
