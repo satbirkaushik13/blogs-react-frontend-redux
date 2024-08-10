@@ -4,6 +4,7 @@ import Editor from 'react-simple-wysiwyg';
 import { useForm } from "react-hook-form";
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import { saveBlog, updateBlog, getBlogImage } from '../http/Api';
 
 const CreateBlog = ({ defaultValues }) => {
     const navigate = useNavigate();
@@ -44,27 +45,27 @@ const CreateBlog = ({ defaultValues }) => {
             }
         });
         try {
-            const method = isUpdate ? defaultValues.id + '?_method=PUT' : 'save';
-            const res = await fetch("http://127.0.0.1:8000/api/blogs/" + method, {
-                method: 'POST',
-                body: formData
-            });
-
-            if (!res.ok) {
-                throw new Error('Network response was not ok');
-            }
-
-            const result = await res.json();
-            if (!result.status) {
-                Object.entries(result.errors).forEach(([field, error]) => {
-                    toast.error(field + ": " + error);
-                });
+            let result, error;
+            if (isUpdate) {
+                ({ response: result, error } = await updateBlog(defaultValues.id, formData));
             } else {
-                toast(result.message);
-                navigate('/');
+                ({ response: result, error } = await saveBlog(formData));
             }
-        } catch (error) {
-            console.error('Error:', error);
+            if (error) {
+                toast.error('Failed to delete blog. Please try again later.');
+                console.error('Error:', error);
+            } else if (result) {
+                if (!result.status) {
+                    Object.entries(result.errors).forEach(([field, error]) => {
+                        toast.error(field + ": " + error);
+                    });
+                } else {
+                    toast(result.message);
+                    navigate('/');
+                }
+            }
+        } catch (e) {
+            console.error('Error:', e);
             toast.error('Error adding blog');
         }
     }
@@ -107,7 +108,7 @@ const CreateBlog = ({ defaultValues }) => {
                             {
                                 (defaultValues && defaultValues.image) && (
                                     <>
-                                        <img className='w-25 mb-2' src={`http://127.0.0.1:8000/uploads/blogs/${defaultValues.image}`} />
+                                        <img className='w-25 mb-2' src={getBlogImage(defaultValues.image)} />
                                         <div className="form-check">
                                             <input className="form-check-input" type="checkbox" onChange={onChangeReplaceImage} />
                                             <label className="form-check-label" htmlFor="flexCheckDefault">

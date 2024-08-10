@@ -1,34 +1,28 @@
-import React, { useEffect, useState } from 'react'
-import BlogCard from './BlogCard'
+import React, { useEffect, useState } from 'react';
+import BlogCard from './BlogCard';
 import { toast } from 'react-toastify';
-import Pagination from './Pagination';
+import Pagination from '../helper/Pagination';
+import { getAllBlogs } from '../http/Api';
 
-const Blogs = () => {
-    const [blogs, setBlogs] = useState(null);
+
+const Blogs = () => {    
     const [page, setPage] = useState(1);
+    const [blogs, setBlogs] = useState(null);
     const [totalPages, setTotalPages] = useState(1);
-    const fetchBlogs = async (page = 1) => {
+    const fetchBlogs = async (page) => {
         try {
-            const res = await fetch('http://127.0.0.1:8000/api/blogs', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json', // Set content type to JSON
-                },
-                body: JSON.stringify({ page })
-            });
-
-            if (!res.ok) {
-                throw new Error('Network response was not ok');
-            }
-
-            const result = await res.json();
-            if (!result.status) {
-                toast.error(result.message);
-            } else {
-                const data = result.data;
-                setBlogs(data.blogs);
-                setPage(data.page);
-                setTotalPages(data.pages);
+            const { response: result, error } = await getAllBlogs(page);
+            if (error) {
+                toast.error('Failed to fetch blogs. Please try again later.');
+                console.error('Error:', error);
+            } else if (result) {
+                if (!result.status) {
+                    toast.error(result.message);
+                } else {
+                    setBlogs(result.data.blogs);
+                    setPage(result.data.page);
+                    setTotalPages(result.data.pages);
+                }
             }
         } catch (error) {
             console.error('Error:', error);
@@ -36,13 +30,8 @@ const Blogs = () => {
     }
 
     useEffect(() => {
-        fetchBlogs();
-    }, []);
-
-    const goToPage = (page) => {
-        setPage(page);
         fetchBlogs(page);
-    };
+    }, [page]);
 
     return (
         <div className="container">
@@ -64,11 +53,12 @@ const Blogs = () => {
                         )
                     }
                 </div>
+
                 {
                     1 < totalPages && (
                         <div className="row">
                             <div className="col-md-12">
-                                <Pagination page={page} totalPages={totalPages} goToPage={goToPage} />
+                                <Pagination page={page} totalPages={totalPages} goToPage={setPage} />
                             </div>
                         </div>
                     )

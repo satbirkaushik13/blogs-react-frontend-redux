@@ -1,25 +1,26 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom';
+import { getBlog } from '../http/Api';
 
 const BlogDetail = () => {
     const [blog, setBlog] = useState([]);
     const params = useParams();
     const fetchBlog = async () => {
         try {
-            const res = await fetch('http://127.0.0.1:8000/api/blogs/' + params.id);
-
-            if (!res.ok) {
-                throw new Error('Network response was not ok');
+            const { response: result, error } = await getBlog(params.id);
+            if (error) {
+                toast.error('Failed to get blog. Please try again later.');
+                console.error('Error:', error);
+            } else if (result) {
+                if (!result.status) {
+                    toast.error(result.message);
+                } else {
+                    console.log(result);
+                    setBlog(result.data);
+                }
             }
-
-            const result = await res.json();
-            if (!result.status) {
-                toast.error(result.message);
-            } else {
-                setBlog(result.data);
-            }
-        } catch (error) {
-            console.error('Error:', error);
+        } catch (e) {
+            console.error('Error:', e);
         }
     }
 
