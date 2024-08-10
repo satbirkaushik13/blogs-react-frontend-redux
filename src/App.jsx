@@ -6,12 +6,20 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import BlogDetail from './components/BlogDetail';
 import EditBlog from './components/EditBlog';
+import LanguageSelector from './helper/LanguageSelector';
+import { useTranslation } from 'react-i18next';
 
 function App() {
+	const { t } = useTranslation();
 	return (
 		<>
-			<div className="bg-dark text-center py-2 shadow-lg">
-				<h2 className='text-white'>Multi Lingual Blogs</h2>
+			<div className="bg-dark py-2 shadow-lg">
+				<div className="d-flex justify-content-between mx-4 align-items-center">
+					<h2 className='text-white'>{t("Multi Lingual Blogs")}</h2>
+					<div className="w-auto">
+						<LanguageSelector />
+					</div>
+				</div>
 			</div>
 			<Routes>
 				<Route path='/' element={<Blogs />} />

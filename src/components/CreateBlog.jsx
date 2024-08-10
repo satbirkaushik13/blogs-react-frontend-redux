@@ -3,10 +3,13 @@ import { useState } from 'react';
 import Editor from 'react-simple-wysiwyg';
 import { useForm } from "react-hook-form";
 import { toast } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { saveBlog, updateBlog, getBlogImage } from '../http/Api';
+import { useDispatch } from 'react-redux';
+import { updateObject, addObject } from '../slices/blogsSlice';
 
 const CreateBlog = ({ defaultValues }) => {
+    const dispatch = useDispatch();
     const navigate = useNavigate();
     const { register, handleSubmit, reset, formState: { errors } } = useForm({
         defaultValues: defaultValues || {},
@@ -60,6 +63,11 @@ const CreateBlog = ({ defaultValues }) => {
                         toast.error(field + ": " + error);
                     });
                 } else {
+                    if (isUpdate) {
+                        dispatch(updateObject(result.data));
+                    } else {
+                        dispatch(addObject(result.data));
+                    }
                     toast(result.message);
                     navigate('/');
                 }
@@ -74,7 +82,7 @@ const CreateBlog = ({ defaultValues }) => {
         <div className='container mb-5'>
             <div className="d-flex justify-content-between mt-5 mb-4">
                 <h4>{isUpdate ? 'Update' : 'Create'}</h4>
-                <a href="/" className='btn btn-dark'>Back</a>
+                <Link to="/" className='btn btn-dark'>Back</Link>
             </div>
             <form onSubmit={handleSubmit(formSubmit)}>
                 <div className="card border-0 shadow-lg">

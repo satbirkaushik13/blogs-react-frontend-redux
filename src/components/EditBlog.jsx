@@ -2,13 +2,16 @@ import React, { useEffect, useState } from 'react'
 import CreateBlog from './CreateBlog'
 import { useParams } from 'react-router-dom';
 import { getBlog } from '../http/Api';
+import { useDispatch, useSelector } from 'react-redux';
+import { addObject } from '../slices/blogsSlice';
 
 const EditBlog = () => {
-    const [blog, setBlog] = useState([]);
-    const params = useParams();
+    const { id } = useParams();
+    const blog = useSelector((state) => state.blogs.list.find(blog => blog.id === parseInt(id)));
+    const dispatch = useDispatch();
     const fetchBlog = async () => {
         try {
-            const { response: result, error } = await getBlog(params.id);
+            const { response: result, error } = await getBlog(id);
             if (error) {
                 toast.error('Failed to get blog. Please try again later.');
                 console.error('Error:', error);
@@ -16,7 +19,7 @@ const EditBlog = () => {
                 if (!result.status) {
                     toast.error(result.message);
                 } else {
-                    setBlog(result.data);
+                    dispatch(addObject(result.data));
                 }
             }
         } catch (e) {
@@ -24,8 +27,10 @@ const EditBlog = () => {
         }
     }
     useEffect(() => {
-        fetchBlog();
-    }, [params.id]);
+        if (!blog) {
+            fetchBlog();
+        }
+    }, [id]);
     return (
         <>
             {blog ? <CreateBlog defaultValues={blog} /> : <p>Loading...</p>}

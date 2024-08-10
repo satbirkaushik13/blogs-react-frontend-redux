@@ -1,14 +1,20 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useTransition } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import BlogCard from './BlogCard';
 import { toast } from 'react-toastify';
 import Pagination from '../helper/Pagination';
 import { getAllBlogs } from '../http/Api';
+import { setBlogs } from '../slices/blogsSlice';
+import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
-
-const Blogs = () => {    
+const Blogs = () => {
+    const { t } = useTranslation();
+    const dispatch = useDispatch();
+    const blogs = useSelector((state) => state.blogs.list);
     const [page, setPage] = useState(1);
-    const [blogs, setBlogs] = useState(null);
     const [totalPages, setTotalPages] = useState(1);
+    console.log(t("description"))
     const fetchBlogs = async (page) => {
         try {
             const { response: result, error } = await getAllBlogs(page);
@@ -19,9 +25,9 @@ const Blogs = () => {
                 if (!result.status) {
                     toast.error(result.message);
                 } else {
-                    setBlogs(result.data.blogs);
                     setPage(result.data.page);
                     setTotalPages(result.data.pages);
+                    dispatch(setBlogs(result.data.blogs));
                 }
             }
         } catch (error) {
@@ -36,8 +42,8 @@ const Blogs = () => {
     return (
         <div className="container">
             <div className="d-flex justify-content-between mt-5 mb-4">
-                <h4>Blogs</h4>
-                <a href="/create" className='btn btn-success'>Create</a>
+                <h4>{t("blogs")}</h4>
+                <Link to="/create" className='btn btn-success'>Create</Link>
             </div>
             <div className="blogs-listing">
                 <div className="row">
