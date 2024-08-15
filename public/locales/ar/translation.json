@@ -1,4 +1,23 @@
 {
-    "blogs": "مدونات",
-    "Multi Lingual Blogs": "مدونات متعددة اللغات"
+    "blogs": "المدونات",
+    "Multi Lingual Blogs": "مدونات متعددة اللغات",
+    "English": "English",
+    "Hindi": "हिन्दी",
+    "Arabic": "عربي",
+    "French": "Français",
+    "Create": "يخلق",
+    "No records found!": "لم يتم العثور على سجلات!",
+    "First": "أولاً",
+    "Previous": "سابق",
+    "Next": "التالي",
+    "Last": "آخر",
+    "Back": "خلف",
+    "Title": "عنوان",
+    "Short Description": "وصف قصير",
+    "Description": "وصف",
+    "Image": "صورة",
+    "Author": "مؤلف",
+    "Loading...": "تحميل...",
+    "Replace/Remove Image": "استبدال/إزالة الصورة",
+    "Update": "تحديث"
 }

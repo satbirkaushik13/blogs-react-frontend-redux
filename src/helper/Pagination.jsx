@@ -1,6 +1,8 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 const Pagination = ({ page, totalPages, goToPage }) => {
+    const { t } = useTranslation();
     const previousPage = Math.max(page - 1, 1);
     const nextPage = Math.min(page + 1, totalPages);
 
@@ -31,7 +33,7 @@ const Pagination = ({ page, totalPages, goToPage }) => {
                         onClick={() => page > 1 && goToPage(1)}
                         role="button"
                     >
-                        First
+                        {t("First")}
                     </span>
                 </li>
                 <li className={`page-item ${page === 1 ? 'disabled' : ''}`}>
@@ -40,7 +42,7 @@ const Pagination = ({ page, totalPages, goToPage }) => {
                         onClick={() => page > 1 && goToPage(previousPage)}
                         role="button"
                     >
-                        Previous
+                        {t("Previous")}
                     </span>
                 </li>
                 {elements}
@@ -50,7 +52,7 @@ const Pagination = ({ page, totalPages, goToPage }) => {
                         onClick={() => page < totalPages && goToPage(nextPage)}
                         role="button"
                     >
-                        Next
+                        {t("Next")}
                     </span>
                 </li>
                 <li className={`page-item ${page === totalPages ? 'disabled' : ''}`}>
@@ -59,7 +61,7 @@ const Pagination = ({ page, totalPages, goToPage }) => {
                         onClick={() => page < totalPages && goToPage(totalPages)}
                         role="button"
                     >
-                        Last
+                        {t("Last")}
                     </span>
                 </li>
             </ul>

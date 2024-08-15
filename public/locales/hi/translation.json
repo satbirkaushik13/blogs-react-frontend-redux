@@ -1,4 +1,23 @@
 {
     "blogs": "ब्लॉग",
-    "Multi Lingual Blogs": "बहुभाषी ब्लॉग"
+    "Multi Lingual Blogs": "बहुभाषी ब्लॉग",
+    "English": "English",
+    "Hindi": "हिन्दी",
+    "Arabic": "عربي",
+    "French": "Français",
+    "Create": "बनाएं",
+    "No records found!": "कोई रिकॉर्ड नहीं मिला!",
+    "First": "पहला",
+    "Previous": "पहले का",
+    "Next": "अगला",
+    "Last": "अंतिम",
+    "Back": "पीछे",
+    "Title": "शीर्षक",
+    "Short Description": "संक्षिप्त वर्णन",
+    "Description": "विवरण",
+    "Image": "छवि",
+    "Author": "लेखक",
+    "Loading...": "लोड हो रहा है...",
+    "Replace/Remove Image": "छवि बदलें/निकालें",
+    "Update": "अद्यतन"
 }

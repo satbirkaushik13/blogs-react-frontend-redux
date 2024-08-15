@@ -3,8 +3,10 @@ import { Link, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import { getBlog } from '../http/Api';
+import { useTranslation } from 'react-i18next';
 
 const BlogDetail = () => {
+    const { t } = useTranslation();
     const { id } = useParams();
     const dispatch = useDispatch();
     const blog = useSelector((state) => state.blogs.list.find(blog => blog.id === parseInt(id)));
@@ -15,7 +17,7 @@ const BlogDetail = () => {
         try {
             const { response: result, error } = await getBlog(params.id);
             if (error) {
-                let errMsg = 'Failed to get blog. Please try again later.';
+                let errMsg = t('Failed to get blog. Please try again later.');
                 setError(errMsg);
                 toast.error(errMsg);
                 console.error('Error:', error);
@@ -28,7 +30,7 @@ const BlogDetail = () => {
                 }
             }
         } catch (e) {
-            let errMsg = 'Unable to fetch blog details.';
+            let errMsg = t('Unable to fetch blog details.');
             setError(errMsg);
             toast.error(errMsg);
             console.error('Error:', e);
@@ -50,14 +52,14 @@ const BlogDetail = () => {
             <div className="d-flex justify-content-between mt-5 mb-4">
                 <h2>{blog.title}</h2>
                 <div>
-                    <Link to="/" className='btn btn-dark'>Back</Link>
+                    <Link to="/" className='btn btn-dark'>{t('Back')}</Link>
                 </div>
             </div>
             <div className="blogs-listing">
                 <div className="row">
                     {
-                        loading ? (<div>Loading...</div>) :
-                            error ? (<div>Error: {error}</div>) :
+                        loading ? (<div>{t("Loading...")}</div>) :
+                            error ? (<div>{t("Error")}: {error}</div>) :
                                 (
                                     <div className="col-md-12">
                                         <p>by <strong>{blog.author}</strong> on {blog.date}</p>

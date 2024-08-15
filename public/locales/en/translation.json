@@ -1,4 +1,23 @@
 {
     "blogs": "Blogs",
-    "Multi Lingual Blogs": "Multi Lingual Blogs"
+    "Multi Lingual Blogs": "Multi Lingual Blogs",
+    "English": "English",
+    "Hindi": "हिन्दी",
+    "Arabic": "عربي",
+    "French": "Français",
+    "Create": "Create",
+    "No records found!": "No records found!",
+    "First": "First",
+    "Previous": "Previous",
+    "Next": "Next",
+    "Last": "Last",
+    "Back": "Back",
+    "Title": "Title",
+    "Short Description": "Short Description",
+    "Description": "Description",
+    "Image": "Image",
+    "Author": "Author",
+    "Loading...": "Loading...",
+    "Replace/Remove Image": "Replace/Remove Image",
+    "Update": "Update"
 }

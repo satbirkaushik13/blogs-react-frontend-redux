@@ -4,8 +4,10 @@ import { useParams } from 'react-router-dom';
 import { getBlog } from '../http/Api';
 import { useDispatch, useSelector } from 'react-redux';
 import { addObject } from '../slices/blogsSlice';
+import { useTranslation } from 'react-i18next';
 
 const EditBlog = () => {
+    const { t } = useTranslation();
     const { id } = useParams();
     const blog = useSelector((state) => state.blogs.list.find(blog => blog.id === parseInt(id)));
     const dispatch = useDispatch();
@@ -13,7 +15,7 @@ const EditBlog = () => {
         try {
             const { response: result, error } = await getBlog(id);
             if (error) {
-                toast.error('Failed to get blog. Please try again later.');
+                toast.error(t('Failed to get blog. Please try again later.'));
                 console.error('Error:', error);
             } else if (result) {
                 if (!result.status) {
@@ -33,7 +35,7 @@ const EditBlog = () => {
     }, [id]);
     return (
         <>
-            {blog ? <CreateBlog defaultValues={blog} /> : <p>Loading...</p>}
+            {blog ? <CreateBlog defaultValues={blog} /> : <p>{t("Loading...")}</p>}
         </>
     )
 }

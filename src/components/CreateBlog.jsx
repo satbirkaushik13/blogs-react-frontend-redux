@@ -7,8 +7,11 @@ import { Link, useNavigate } from 'react-router-dom';
 import { saveBlog, updateBlog, getBlogImage } from '../http/Api';
 import { useDispatch } from 'react-redux';
 import { updateObject, addObject } from '../slices/blogsSlice';
+import { t } from 'i18next';
+import { useTranslation } from 'react-i18next';
 
 const CreateBlog = ({ defaultValues }) => {
+    const { t } = useTranslation();
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { register, handleSubmit, reset, formState: { errors } } = useForm({
@@ -81,38 +84,38 @@ const CreateBlog = ({ defaultValues }) => {
     return (
         <div className='container mb-5'>
             <div className="d-flex justify-content-between mt-5 mb-4">
-                <h4>{isUpdate ? 'Update' : 'Create'}</h4>
-                <Link to="/" className='btn btn-dark'>Back</Link>
+                <h4>{isUpdate ? t('Update') : t('Create')}</h4>
+                <Link to="/" className='btn btn-dark'>{t("Back")}</Link>
             </div>
             <form onSubmit={handleSubmit(formSubmit)}>
                 <div className="card border-0 shadow-lg">
                     <div className="card-body">
                         <div className="mb-3">
-                            <label className="form-label">Title<span className='text-danger'>*</span></label>
+                            <label className="form-label">{t("Title")}<span className='text-danger'>*</span></label>
                             <input {...register('title', { required: true })}
                                 type='text'
                                 className={`form-control ${errors.title && 'is-invalid'}`}
                                 placeholder='Title' />
-                            {errors.title && <p className='invalid-feedback'>Title field is required</p>}
+                            {errors.title && <p className='invalid-feedback'>{t("Title field is required")}</p>}
                         </div>
                         <div className="mb-3">
-                            <label className="form-label">Short Description<span className='text-danger'>*</span></label>
+                            <label className="form-label">{t("Short Description")}<span className='text-danger'>*</span></label>
                             <textarea {...register('short_desc', { required: true })}
                                 rows="3"
                                 maxLength={200}
                                 minLength={100}
                                 className={`form-control ${errors.short_desc && 'is-invalid'}`}></textarea>
-                            {errors.short_desc && <p className='invalid-feedback'>Short Description field is required</p>}
+                            {errors.short_desc && <p className='invalid-feedback'>{t("Short Description field is required")}</p>}
                         </div>
                         <div className="mb-3">
-                            <label className="form-label">Description</label>
+                            <label className="form-label">{t("Description")}</label>
                             <Editor
                                 containerProps={{ style: { height: '400px' } }}
                                 value={description}
                                 onChange={onChangeDescription} />
                         </div>
                         <div className="mb-3">
-                            <label className="form-label">Image</label><br />
+                            <label className="form-label">{t("Image")}</label><br />
                             {
                                 (defaultValues && defaultValues.image) && (
                                     <>
@@ -120,7 +123,7 @@ const CreateBlog = ({ defaultValues }) => {
                                         <div className="form-check">
                                             <input className="form-check-input" type="checkbox" onChange={onChangeReplaceImage} />
                                             <label className="form-check-label" htmlFor="flexCheckDefault">
-                                                Replace/Remove Image
+                                                {t("Replace/Remove Image")}
                                             </label>
                                         </div>
                                     </>
@@ -130,14 +133,14 @@ const CreateBlog = ({ defaultValues }) => {
                             <input type='file' onChange={onChangeImageField} className='form-control' />
                         </div>
                         <div className="mb-3">
-                            <label className="form-label">Author<span className='text-danger'>*</span></label>
+                            <label className="form-label">{t("Author")}<span className='text-danger'>*</span></label>
                             <input {...register('author', { required: true })}
                                 type='text'
                                 className={`form-control ${errors.author && 'is-invalid'}`}
                                 placeholder='Author' />
-                            {errors.author && <p className='invalid-feedback'>Author field is required</p>}
+                            {errors.author && <p className='invalid-feedback'>{t("Author field is required")}</p>}
                         </div>
-                        <button type="submit" className='btn btn-dark'>{isUpdate ? 'Update' : 'Create'}</button>
+                        <button type="submit" className='btn btn-dark'>{isUpdate ? t('Update') : t('Create')}</button>
                     </div>
                 </div>
             </form>

@@ -4,15 +4,17 @@ import { useDispatch } from 'react-redux';
 import { deleteBlog, getBlogImage } from '../http/Api';
 import { Link } from "react-router-dom";
 import { removeObject } from '../slices/blogsSlice';
+import { useTranslation } from "react-i18next";
 
 const BlogCard = ({ blog }) => {
+    const { t } = useTranslation();
     const dispatch = useDispatch();
     const removeBlog = async (id) => {
-        if (confirm('Are you sure?')) {
+        if (confirm(t('Are you sure?'))) {
             try {
                 const { response: result, error } = await deleteBlog(id);
                 if (error) {
-                    toast.error('Failed to delete blog. Please try again later.');
+                    toast.error(t('Failed to delete blog. Please try again later.'));
                     console.error('Error:', error);
                 } else if (result) {
                     if (!result.status) {
